@@ -1,8 +1,8 @@
 # Egzamin z WWW
 Prosta aplikacja w Django do zarządzania zakładami piłkarskimi. Pisana w trakcie egzaminu z aplikacji WWW.
 
-Treść egzaminu: egzamin.html (wszystkie podpunkty zrobione)
+<b>Treść egzaminu:</b> egzamin.html (wszystkie podpunkty zrobione)
 
-Dane do admina:
+<b>Dane do admina:</b>
 - login: tomcio
 - hasło: abc123
