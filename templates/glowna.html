@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Los tabelkos</title>
+
+    <script src="{{ STATIC_URL }}bootstrap/js/jquery.min.js"></script>
+    <link rel="stylesheet" href="{{ STATIC_URL }}bootstrap/css/bootstrap.min.css">
+    <script src="{{ STATIC_URL }}bootstrap/js/bootstrap.min.js"></script>
+</head>
+<body>
+    <table border="1" style="width:300px">
+        <tr>
+          <td>Kto</td>
+          <td>Mecz</td>
+          <td>Wynik</td>
+        </tr>
+
+        {% for zaklad in zaklady %}
+        <tr>
+          <td>{{ zaklad.kto }}</td>
+          <td>{{ zaklad.mecz.opis }}</td>
+          <td>{{ zaklad.wynika }}-{{ zaklad.wynikb }}</td>
+        </tr>
+        {% endfor %}
+
+    </table>
+
+    <div class="pagination">
+        <span class="step-links">
+            {% if zaklady.has_previous %}
+                <form action="{% url 'glowna' %}" method="POST">
+                    {% csrf_token %}
+                    <input type="hidden" name="zaznaczono">
+                    <input type="hidden" name="strona" value="{{ zaklady.previous_page_number }}">
+                    {% for zaklad in wszystkiezaklady %}
+                      <input type="hidden" name="{{ zaklad.mecz.id }}">
+                    {% endfor %}
+                  <input type="submit" value="Poprzednia">
+                </form>
+            {% endif %}
+
+            <span class="current">
+                Strona {{ zaklady.number }} z {{ zaklady.paginator.num_pages }}
+            </span>
+
+            {% if zaklady.has_next %}
+                <form action="{% url 'glowna' %}" method="POST">
+                    {% csrf_token %}
+                    <input type="hidden" name="zaznaczono">
+                    <input type="hidden" name="strona" value="{{ zaklady.next_page_number }}">
+                    {% for zaklad in wszystkiezaklady %}
+                      <input type="hidden" name="{{ zaklad.mecz.id }}">
+                    {% endfor %}
+                  <input type="submit" value="Następna">
+                </form>
+            {% endif %}
+        </span>
+    </div>
+    <br />
+
+
+    <!-- Button trigger modal -->
+    <button class="btn btn-primary btn-lg" data-toggle="modal" data-target="#myModal">
+      Wyniki
+    </button>
+
+    <!-- Modal -->
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            <h4 class="modal-title" id="myModalLabel">Wyniki</h4>
+          </div>
+          <div class="modal-body">
+            {% for key, value in wyniki.items %}
+                {{ key }} - {{ value }} <br />
+            {% endfor %}
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Zamknij</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <p>
+    <form action="{% url 'glowna' %}" method="POST">
+        {% csrf_token %}
+        <input type="hidden" name="zaznaczono">
+        {% for mecz in mecze %}
+          <input type="checkbox" name="{{ mecz.id }}">{{ mecz.opis }}<br>
+        {% endfor %}
+      <input type="submit" value="Wyfiltruj">
+    </form>
+    </p>
+
+</body>
+</html>
